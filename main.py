@@ -1,25 +1,31 @@
 import google.generativeai as genai
-from senha import API_KEY
+from dotenv import load_dotenv
+import os
 
-genai.configure(api_key=API_KEY)
+load_dotenv()
 
-for model in genai.list_models():
-    if 'generateContent' in model.supported_generation_methods:
-        print(model.name)
+def chat():
+    genai.configure(api_key=os.getenv("API_KEY"))
+
+    for model in genai.list_models():
+        if 'generateContent' in model.supported_generation_methods:
+            print(model.name)
 
 
-model = genai.GenerativeModel("gemini-1.5-pro-latest")
+    model = genai.GenerativeModel("gemini-1.5-pro-latest")
 
-question = model.generate_content("Quem criou os modelos de IA Gemini ? ")
-print(question.text)
+    question = model.generate_content("Quem criou os modelos de IA Gemini ? ")
+    print(question.text)
 
-chat = model.start_chat(history=[])
+    chat = model.start_chat(history=[])
 
-prompt = input("Digite o que deseja: ")
+    prompt = input("Digite o que deseja: ")
 
-while prompt != "sair":
-    awnser = chat.send_message(prompt)
-    print(awnser.text)
-    prompt = input("Digite 'Sair' se Deseja Sair: ").lower()
+    while prompt != "sair":
+        awnser = chat.send_message(prompt)
+        print(awnser.text)
+        prompt = input("Digite o que deseja, Se deseja sair digite 'sair': ").lower()
 
+if __name__ == "__main__":
+    chat()
 
